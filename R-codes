@@ -1,0 +1,24 @@
+#Clear working directory
+rm(list=ls()) 
+# Set/Load  working directory
+setwd("C:\\Users\\Philipmunyua\\Google Drive\\nanoHUB research\\02 analysis\\04 develop level _test spatial\\02 input data")
+# Generating alpha and model distribution
+dat<-read.csv("t06_deg_freq.csv")
+dat$X<-NULL
+dat$ln_deg<-log(dat$degree)
+dat$ln_freq<-log(dat$Freq)
+summary(dat)
+a<-0.98
+a1<-range(0.000,1.000)
+m<-(weighted.mean(dat$degree, dat$Freq)*0.5)
+d<-as.matrix(dat$degree)
+fd<-as.matrix(dat$Freq)
+xd<-as.matrix(dat$degree+((2*m*a)/(1-a)))
+y<-log(fd)
+x<-log(xd)
+fit <- lm(y ~ x, data=dat)
+#summary(fit) # show results
+b.fit<-coef(fit)
+b<-b.fit[2]
+t<-((b-2)/b)
+a1<-ifelse(t>max(a1),max(a1),t)
